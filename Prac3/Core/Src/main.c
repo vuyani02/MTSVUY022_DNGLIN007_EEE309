@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2023 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2023 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -35,7 +35,7 @@
 /* USER CODE BEGIN PD */
 
 // Definitions for SPI usage
-#define MEM_SIZE 8192 // bytes
+#define MEM_SIZE 8192   // bytes
 #define WREN 0b00000110 // enable writing
 #define WRDI 0b00000100 // disable writing
 #define RDSR 0b00000101 // read status register
@@ -59,9 +59,9 @@ TIM_HandleTypeDef htim16;
 /* USER CODE BEGIN PV */
 
 // TODO: Define input variables
-uint8_t vals[]={0b10101010, 0b01010101, 0b11001100, 0b00110011, 0b11110000, 0b00001111};
-uint16_t write_address =0x0000 ,read_address =0x0000;
-uint8_t counter=0;
+uint8_t vals[] = {0b10101010, 0b01010101, 0b11001100, 0b00110011, 0b11110000, 0b00001111};
+uint16_t write_address = 0x0000, read_address = 0x0000;
+uint8_t counter = 0;
 
 /* USER CODE END PV */
 
@@ -94,9 +94,9 @@ static void spi_delay(uint32_t delay_in_us);
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
 
@@ -138,12 +138,12 @@ int main(void)
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3); // Start PWM on TIM3 Channel 3
 
   // TODO: Write all bytes to EEPROM using "write_to_address"
-  for(uint8_t i=0;i<6;i++){
-	  write_to_address(write_address,vals[i]);
-	  write_address++;
+  for (uint8_t i = 0; i < 6; i++)
+  {
+    write_to_address(write_address, vals[i]);
+    write_address++;
   }
 
-  
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -151,15 +151,14 @@ int main(void)
   while (1)
   {
 
-	// TODO: Poll ADC
-	  uint32_t adc_val =pollADC();
+    // TODO: Poll ADC
+    uint32_t adc_val = pollADC();
 
-	// TODO: Get CRR
-	  CCR =ADCtoCCR(adc_val);
-  
+    // TODO: Get CRR
+    CCR = ADCtoCCR(adc_val);
 
-  // Update PWM value
-	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3,  CCR);
+    // Update PWM value
+    __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, CCR);
 
     /* USER CODE END WHILE */
 
@@ -169,44 +168,41 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   LL_FLASH_SetLatency(LL_FLASH_LATENCY_0);
-  while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_0)
+  while (LL_FLASH_GetLatency() != LL_FLASH_LATENCY_0)
   {
   }
   LL_RCC_HSI_Enable();
 
-   /* Wait till HSI is ready */
-  while(LL_RCC_HSI_IsReady() != 1)
+  /* Wait till HSI is ready */
+  while (LL_RCC_HSI_IsReady() != 1)
   {
-
   }
   LL_RCC_HSI_SetCalibTrimming(16);
   LL_RCC_HSI14_Enable();
 
-   /* Wait till HSI14 is ready */
-  while(LL_RCC_HSI14_IsReady() != 1)
+  /* Wait till HSI14 is ready */
+  while (LL_RCC_HSI14_IsReady() != 1)
   {
-
   }
   LL_RCC_HSI14_SetCalibTrimming(16);
   LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
   LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
   LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
 
-   /* Wait till System clock is ready */
-  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI)
+  /* Wait till System clock is ready */
+  while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI)
   {
-
   }
   LL_SetSystemCoreClock(8000000);
 
-   /* Update the time base */
-  if (HAL_InitTick (TICK_INT_PRIORITY) != HAL_OK)
+  /* Update the time base */
+  if (HAL_InitTick(TICK_INT_PRIORITY) != HAL_OK)
   {
     Error_Handler();
   }
@@ -214,10 +210,10 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief ADC Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief ADC Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_ADC_Init(void)
 {
 
@@ -231,7 +227,7 @@ static void MX_ADC_Init(void)
   /* USER CODE END ADC_Init 1 */
 
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
-  */
+   */
   hadc.Instance = ADC1;
   hadc.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
   hadc.Init.Resolution = ADC_RESOLUTION_12B;
@@ -252,7 +248,7 @@ static void MX_ADC_Init(void)
   }
 
   /** Configure for the selected ADC regular channel to be converted.
-  */
+   */
   sConfig.Channel = ADC_CHANNEL_6;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
   sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
@@ -262,18 +258,19 @@ static void MX_ADC_Init(void)
   }
   /* USER CODE BEGIN ADC_Init 2 */
   ADC1->CR |= ADC_CR_ADCAL;
-  while(ADC1->CR & ADC_CR_ADCAL);			// Calibrate the ADC
-  ADC1->CR |= (1 << 0);						// Enable ADC
-  while((ADC1->ISR & (1 << 0)) == 0);		// Wait for ADC ready
+  while (ADC1->CR & ADC_CR_ADCAL)
+    ;                   // Calibrate the ADC
+  ADC1->CR |= (1 << 0); // Enable ADC
+  while ((ADC1->ISR & (1 << 0)) == 0)
+    ; // Wait for ADC ready
   /* USER CODE END ADC_Init 2 */
-
 }
 
 /**
-  * @brief TIM3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief TIM3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_TIM3_Init(void)
 {
 
@@ -325,14 +322,13 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
-
 }
 
 /**
-  * @brief TIM6 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief TIM6 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_TIM6_Init(void)
 {
 
@@ -346,9 +342,9 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 8000-1;
+  htim6.Init.Prescaler = 8000 - 1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 500-1;
+  htim6.Init.Period = 500 - 1;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
@@ -363,14 +359,13 @@ static void MX_TIM6_Init(void)
   /* USER CODE BEGIN TIM6_Init 2 */
   NVIC_EnableIRQ(TIM6_IRQn);
   /* USER CODE END TIM6_Init 2 */
-
 }
 
 /**
-  * @brief TIM16 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief TIM16 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_TIM16_Init(void)
 {
 
@@ -382,9 +377,9 @@ static void MX_TIM16_Init(void)
 
   /* USER CODE END TIM16_Init 1 */
   htim16.Instance = TIM16;
-  htim16.Init.Prescaler = 8000-1;
+  htim16.Init.Prescaler = 8000 - 1;
   htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim16.Init.Period = 1000-1;
+  htim16.Init.Period = 1000 - 1;
   htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim16.Init.RepetitionCounter = 0;
   htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
@@ -395,20 +390,19 @@ static void MX_TIM16_Init(void)
   /* USER CODE BEGIN TIM16_Init 2 */
   NVIC_EnableIRQ(TIM16_IRQn);
   /* USER CODE END TIM16_Init 2 */
-
 }
 
 /**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief GPIO Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_GPIO_Init(void)
 {
   LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOF);
@@ -442,220 +436,239 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(LED7_GPIO_Port, &GPIO_InitStruct);
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
   HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
-/* USER CODE END MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
 void EXTI0_1_IRQHandler(void)
 {
-	// TODO: Add code to switch LED7 delay frequency
-	static uint8_t check = 0;
-	static uint32_t prev_interrupt_time =0;
-	uint32_t current_interrupt_time =HAL_GetTick();
+  // TODO: Add code to switch LED7 delay frequency
+  static uint8_t check = 0;
+  static uint32_t prev_interrupt_time = 0;
+  uint32_t current_interrupt_time = HAL_GetTick();
 
-	if((current_interrupt_time - prev_interrupt_time) >=150){
+  if ((current_interrupt_time - prev_interrupt_time) >= 150)
+  {
 
-		prev_interrupt_time = current_interrupt_time;
+    prev_interrupt_time = current_interrupt_time;
 
-		if(check ==0){
-			//setting to 1Hz frequency
-			__HAL_TIM_SET_PRESCALER(&htim6, 799);
-			__HAL_TIM_SET_AUTORELOAD(&htim6, 9999);
-			check =1;
-		}
-		else{
-			//setting to 2Hz
-			__HAL_TIM_SET_PRESCALER(&htim6, 399);
-			__HAL_TIM_SET_AUTORELOAD(&htim6, 9999);
+    if (check == 0)
+    {
+      // setting to 1Hz frequency
+      __HAL_TIM_SET_PRESCALER(&htim6, 799);
+      __HAL_TIM_SET_AUTORELOAD(&htim6, 9999);
+      check = 1;
+    }
+    else
+    {
+      // setting to 2Hz
+      __HAL_TIM_SET_PRESCALER(&htim6, 399);
+      __HAL_TIM_SET_AUTORELOAD(&htim6, 9999);
 
-			check =0;
-		}
-	}
+      check = 0;
+    }
+  }
 
-
-	HAL_GPIO_EXTI_IRQHandler(Button0_Pin); // Clear interrupt flags
+  HAL_GPIO_EXTI_IRQHandler(Button0_Pin); // Clear interrupt flags
 }
 
 void TIM6_IRQHandler(void)
 {
-	// Acknowledge interrupt
-	HAL_TIM_IRQHandler(&htim6);
+  // Acknowledge interrupt
+  HAL_TIM_IRQHandler(&htim6);
 
-	// Toggle LED7
-	HAL_GPIO_TogglePin(GPIOB, LED7_Pin);
+  // Toggle LED7
+  HAL_GPIO_TogglePin(GPIOB, LED7_Pin);
 }
 
 void TIM16_IRQHandler(void)
 {
-	// Acknowledge interrupt
-	HAL_TIM_IRQHandler(&htim16);
+  // Acknowledge interrupt
+  HAL_TIM_IRQHandler(&htim16);
 
-	// TODO: Initialise a string to output second line on LCD
-	uint8_t x =read_from_address(read_address);
-    // Convert the byte data to a string representation for display
-    char buffer[20];  // Enough to store a 3-digit number and null terminator
-    snprintf(buffer, sizeof(buffer), "%u", x); // Convert the number to a string
+  // TODO: Initialise a string to output second line on LCD
+  uint8_t x = read_from_address(read_address);
+  // Convert the byte data to a string representation for display
+  char buffer[20];                           // Enough to store a 3-digit number and null terminator
+  snprintf(buffer, sizeof(buffer), "%u", x); // Convert the number to a string
 
+  // TODO: Change LED pattern; output 0x01 if the read SPI data is incorrect
+  if (vals[counter] != x)
+  {
+    //		 GPIOB->ODR |= 0x01; //not working
+    snprintf(buffer, sizeof(buffer), "SPI ERROR!");
+  }
+  counter++;
+  read_address++;
 
-
-	// TODO: Change LED pattern; output 0x01 if the read SPI data is incorrect
-	if(vals[counter] !=x){
-//		 GPIOB->ODR |= 0x01; //not working
-		snprintf(buffer, sizeof(buffer), "SPI ERROR!");
-	}
-	counter ++; read_address++;
-
-	if(counter >5){
-		counter=0; read_address =0x0000;
-	}
-	writeLCD(buffer);
-
+  if (counter > 5)
+  {
+    counter = 0;
+    read_address = 0x0000;
+  }
+  writeLCD(buffer);
 }
 
 // TODO: Complete the writeLCD function
-void writeLCD(char *char_in){
+void writeLCD(char *char_in)
+{
   delay(3000);
   lcd_command(CLEAR);
   lcd_putstring("EEPROM BYTE:");
   lcd_command(LINE_TWO);
   lcd_putstring(char_in);
-  
 }
 
 // Get ADC value
-uint32_t pollADC(void){
-	HAL_ADC_Start(&hadc); // start the adc
-	HAL_ADC_PollForConversion(&hadc, 100); // poll for conversion
-	uint32_t val = HAL_ADC_GetValue(&hadc); // get the adc value
-	HAL_ADC_Stop(&hadc); // stop adc
-	return val;
+uint32_t pollADC(void)
+{
+  HAL_ADC_Start(&hadc);                   // start the adc
+  HAL_ADC_PollForConversion(&hadc, 100);  // poll for conversion
+  uint32_t val = HAL_ADC_GetValue(&hadc); // get the adc value
+  HAL_ADC_Stop(&hadc);                    // stop adc
+  return val;
 }
 
 // Calculate PWM CCR value
-uint32_t ADCtoCCR(uint32_t adc_val){
+uint32_t ADCtoCCR(uint32_t adc_val)
+{
   // TODO: Calculate CCR value (val) using an appropriate equation
-	uint32_t max_ADC_Val=4095, arr =47999;
+  uint32_t max_ADC_Val = 4095, arr = 47999;
 
-	uint32_t ccr= (adc_val*arr)/max_ADC_Val ;
+  uint32_t ccr = (adc_val * arr) / max_ADC_Val;
 
-	return ccr;
+  return ccr;
 }
 
 void ADC1_COMP_IRQHandler(void)
 {
-//	adc_val = HAL_ADC_GetValue(&hadc); // read adc value
-	HAL_ADC_IRQHandler(&hadc); //Clear flags
+  //	adc_val = HAL_ADC_GetValue(&hadc); // read adc value
+  HAL_ADC_IRQHandler(&hadc); // Clear flags
 }
 
 // Initialise SPI
-static void init_spi(void) {
+static void init_spi(void)
+{
 
   // Clock to PB
-  RCC->AHBENR |= RCC_AHBENR_GPIOBEN; 	// Enable clock for SPI port
+  RCC->AHBENR |= RCC_AHBENR_GPIOBEN; // Enable clock for SPI port
 
   // Set pin modes
   GPIOB->MODER |= GPIO_MODER_MODER13_1; // Set pin SCK (PB13) to Alternate Function
   GPIOB->MODER |= GPIO_MODER_MODER14_1; // Set pin MISO (PB14) to Alternate Function
   GPIOB->MODER |= GPIO_MODER_MODER15_1; // Set pin MOSI (PB15) to Alternate Function
   GPIOB->MODER |= GPIO_MODER_MODER12_0; // Set pin CS (PB12) to output push-pull
-  GPIOB->BSRR |= GPIO_BSRR_BS_12; 		// Pull CS high
+  GPIOB->BSRR |= GPIO_BSRR_BS_12;       // Pull CS high
 
   // Clock enable to SPI
   RCC->APB1ENR |= RCC_APB1ENR_SPI2EN;
-  SPI2->CR1 |= SPI_CR1_BIDIOE; 									// Enable output
-  SPI2->CR1 |= (SPI_CR1_BR_0 |  SPI_CR1_BR_1); 					// Set Baud to fpclk / 16
-  SPI2->CR1 |= SPI_CR1_MSTR; 									// Set to master mode
-  SPI2->CR2 |= SPI_CR2_FRXTH; 									// Set RX threshold to be 8 bits
-  SPI2->CR2 |= SPI_CR2_SSOE; 									// Enable slave output to work in master mode
-  SPI2->CR2 |= (SPI_CR2_DS_0 | SPI_CR2_DS_1 | SPI_CR2_DS_2); 	// Set to 8-bit mode
-  SPI2->CR1 |= SPI_CR1_SPE; 									// Enable the SPI peripheral
+  SPI2->CR1 |= SPI_CR1_BIDIOE;                               // Enable output
+  SPI2->CR1 |= (SPI_CR1_BR_0 | SPI_CR1_BR_1);                // Set Baud to fpclk / 16
+  SPI2->CR1 |= SPI_CR1_MSTR;                                 // Set to master mode
+  SPI2->CR2 |= SPI_CR2_FRXTH;                                // Set RX threshold to be 8 bits
+  SPI2->CR2 |= SPI_CR2_SSOE;                                 // Enable slave output to work in master mode
+  SPI2->CR2 |= (SPI_CR2_DS_0 | SPI_CR2_DS_1 | SPI_CR2_DS_2); // Set to 8-bit mode
+  SPI2->CR1 |= SPI_CR1_SPE;                                  // Enable the SPI peripheral
 }
 
 // Implements a delay in microseconds
-static void spi_delay(uint32_t delay_in_us) {
+static void spi_delay(uint32_t delay_in_us)
+{
   volatile uint32_t counter = 0;
   delay_in_us *= 3;
-  for(; counter < delay_in_us; counter++) {
+  for (; counter < delay_in_us; counter++)
+  {
     __asm("nop");
     __asm("nop");
   }
 }
 
 // Write to EEPROM address using SPI
-static void write_to_address(uint16_t address, uint8_t data) {
+static void write_to_address(uint16_t address, uint8_t data)
+{
 
-	uint8_t dummy; // Junk from the DR
+  uint8_t dummy; // Junk from the DR
 
-	// Set the Write Enable latch
-	GPIOB->BSRR |= GPIO_BSRR_BR_12; // Pull CS low
-	spi_delay(1);
-	*((uint8_t*)(&SPI2->DR)) = WREN;
-	while ((SPI2->SR & SPI_SR_RXNE) == 0); // Hang while RX is empty
-	dummy = SPI2->DR;
-	GPIOB->BSRR |= GPIO_BSRR_BS_12; // Pull CS high
-	spi_delay(5000);
+  // Set the Write Enable latch
+  GPIOB->BSRR |= GPIO_BSRR_BR_12; // Pull CS low
+  spi_delay(1);
+  *((uint8_t *)(&SPI2->DR)) = WREN;
+  while ((SPI2->SR & SPI_SR_RXNE) == 0)
+    ; // Hang while RX is empty
+  dummy = SPI2->DR;
+  GPIOB->BSRR |= GPIO_BSRR_BS_12; // Pull CS high
+  spi_delay(5000);
 
-	// Send write instruction
-	GPIOB->BSRR |= GPIO_BSRR_BR_12; 			// Pull CS low
-	spi_delay(1);
-	*((uint8_t*)(&SPI2->DR)) = WRITE;
-	while ((SPI2->SR & SPI_SR_RXNE) == 0); 		// Hang while RX is empty
-	dummy = SPI2->DR;
+  // Send write instruction
+  GPIOB->BSRR |= GPIO_BSRR_BR_12; // Pull CS low
+  spi_delay(1);
+  *((uint8_t *)(&SPI2->DR)) = WRITE;
+  while ((SPI2->SR & SPI_SR_RXNE) == 0)
+    ; // Hang while RX is empty
+  dummy = SPI2->DR;
 
-	// Send 16-bit address
-	*((uint8_t*)(&SPI2->DR)) = (address >> 8); 	// Address MSB
-	while ((SPI2->SR & SPI_SR_RXNE) == 0); 		// Hang while RX is empty
-	dummy = SPI2->DR;
-	*((uint8_t*)(&SPI2->DR)) = (address); 		// Address LSB
-	while ((SPI2->SR & SPI_SR_RXNE) == 0); 		// Hang while RX is empty
-	dummy = SPI2->DR;
+  // Send 16-bit address
+  *((uint8_t *)(&SPI2->DR)) = (address >> 8); // Address MSB
+  while ((SPI2->SR & SPI_SR_RXNE) == 0)
+    ; // Hang while RX is empty
+  dummy = SPI2->DR;
+  *((uint8_t *)(&SPI2->DR)) = (address); // Address LSB
+  while ((SPI2->SR & SPI_SR_RXNE) == 0)
+    ; // Hang while RX is empty
+  dummy = SPI2->DR;
 
-	// Send the data
-	*((uint8_t*)(&SPI2->DR)) = data;
-	while ((SPI2->SR & SPI_SR_RXNE) == 0); // Hang while RX is empty
-	dummy = SPI2->DR;
-	GPIOB->BSRR |= GPIO_BSRR_BS_12; // Pull CS high
-	spi_delay(5000);
+  // Send the data
+  *((uint8_t *)(&SPI2->DR)) = data;
+  while ((SPI2->SR & SPI_SR_RXNE) == 0)
+    ; // Hang while RX is empty
+  dummy = SPI2->DR;
+  GPIOB->BSRR |= GPIO_BSRR_BS_12; // Pull CS high
+  spi_delay(5000);
 }
 
 // Read from EEPROM address using SPI
-static uint8_t read_from_address(uint16_t address) {
+static uint8_t read_from_address(uint16_t address)
+{
 
-	uint8_t dummy; // Junk from the DR
+  uint8_t dummy; // Junk from the DR
 
-	// Send the read instruction
-	GPIOB->BSRR |= GPIO_BSRR_BR_12; 			// Pull CS low
-	spi_delay(1);
-	*((uint8_t*)(&SPI2->DR)) = READ;
-	while ((SPI2->SR & SPI_SR_RXNE) == 0); 		// Hang while RX is empty
-	dummy = SPI2->DR;
+  // Send the read instruction
+  GPIOB->BSRR |= GPIO_BSRR_BR_12; // Pull CS low
+  spi_delay(1);
+  *((uint8_t *)(&SPI2->DR)) = READ;
+  while ((SPI2->SR & SPI_SR_RXNE) == 0)
+    ; // Hang while RX is empty
+  dummy = SPI2->DR;
 
-	// Send 16-bit address
-	*((uint8_t*)(&SPI2->DR)) = (address >> 8); 	// Address MSB
-	while ((SPI2->SR & SPI_SR_RXNE) == 0);		// Hang while RX is empty
-	dummy = SPI2->DR;
-	*((uint8_t*)(&SPI2->DR)) = (address); 		// Address LSB
-	while ((SPI2->SR & SPI_SR_RXNE) == 0); 		// Hang while RX is empty
-	dummy = SPI2->DR;
+  // Send 16-bit address
+  *((uint8_t *)(&SPI2->DR)) = (address >> 8); // Address MSB
+  while ((SPI2->SR & SPI_SR_RXNE) == 0)
+    ; // Hang while RX is empty
+  dummy = SPI2->DR;
+  *((uint8_t *)(&SPI2->DR)) = (address); // Address LSB
+  while ((SPI2->SR & SPI_SR_RXNE) == 0)
+    ; // Hang while RX is empty
+  dummy = SPI2->DR;
 
-	// Clock in the data
-	*((uint8_t*)(&SPI2->DR)) = 0x42; 			// Clock out some junk data
-	while ((SPI2->SR & SPI_SR_RXNE) == 0); 		// Hang while RX is empty
-	dummy = SPI2->DR;
-	GPIOB->BSRR |= GPIO_BSRR_BS_12; 			// Pull CS high
-	spi_delay(5000);
+  // Clock in the data
+  *((uint8_t *)(&SPI2->DR)) = 0x42; // Clock out some junk data
+  while ((SPI2->SR & SPI_SR_RXNE) == 0)
+    ; // Hang while RX is empty
+  dummy = SPI2->DR;
+  GPIOB->BSRR |= GPIO_BSRR_BS_12; // Pull CS high
+  spi_delay(5000);
 
-	return dummy;								// Return read data
+  return dummy; // Return read data
 }
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -667,14 +680,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
