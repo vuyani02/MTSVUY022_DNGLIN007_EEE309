@@ -461,7 +461,7 @@ void EXTI0_1_IRQHandler(void)
 		prev_interrupt_time = current_interrupt_time;
 
 		if(check ==0){
-			//setting to 1Hz
+			//setting to 1Hz frequency
 			__HAL_TIM_SET_PRESCALER(&htim6, 799);
 			__HAL_TIM_SET_AUTORELOAD(&htim6, 9999);
 			check =1;
